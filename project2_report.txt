@@ -1,0 +1,42 @@
+Oscar (Zheng) He
+Project 2 Report
+
+Partners: None
+
+#1)
+Trigger log_insert:
+	I created a sequence that starts with 1 and increments by 1. In the trigger, each time a new row is inserted into logs, the logid will be incremented by 1 regardless of whether the logid is provided or not.
+
+#2)
+Procedure to display all tables:
+	For each table, I used a cursor to get the necessary information. I then initialized arrays for each attribute. I used bulk collect from the cursors and fetched all the information into my arrays. Then I used a for loop to display all the table informations.
+
+#3)
+Procedure to add customer into customers table
+	With all the customer attributes in the parameters, I just inserted it into customers with a simple query.
+
+#4)
+Procedure to display customer and accounts
+	I used a cursor to get the customer name, aid and account type. This was possible by using the left join on transaction then a left join on accounts and then grouping them. This was necessary because accounts cannot be directly accessed from customers so I had to go through transaction. I got all the account information associated with the customer id into an array from the cursor. I then did all the error checking to see if the cid is valid or if no accounts are associated with the customer. If it is a valid cid, I used a for loop to display the id, name and all of its accounts.
+
+#5)
+Procedure to display account info and all of its transactions
+	I used the same method as #4. However, this time the query for the cursor was much simpler.
+
+#6)
+Procedure to open an account for a customer
+	This procedure gets the correct cid in a cursor. I couldn't do this in a simpler way for some reason… I kept getting errors so I resorted to use a cursor. It checks if the array that holds all the ids are empty, then the cid is invalid. Else, it inserts into accounts first, then into transaction since accounts has a foreign key in transaction.
+
+#7)
+Procedure to add a transaction to transaction table
+	Once again, I kept getting weird errors using a simpler method to get the right ids for employee, customer and account so I resorted to using 3 different cursors. Once I got the right ids, I checked to see if they were valid. I also checked to see if the type given in the parameter was part of the 5 types of transactions. I also checked if a customer wanted to withdraw, then if the amount is less than or equal to the balance. If all the conditions pass, then this transaction is inserted into the transaction table.
+
+#8)
+Triggers for adding, deleting a customer and for opening an account
+	I created a trigger before insert or delete on customers. Before inserting, it will insert into logs table the new customer information. Before deleting, it will insert the old customer information.
+	I created a trigger on transaction. It will check if the new transaction_type is 'Open' then find the name of the customer through the query. It will then add the information into the logs table. 
+
+Interface:
+	For the interface, I created a class called DbmsOutput to output the necessary statements from the plsql code that use dbms_output.put_line. 
+	It uses another class for the actual execution of the project and all of its procedures.
+	For some reason, within this project, the procedures that alter the tables do not work because of the triggers present. It works normally within the sql terminal though.
